@@ -1,0 +1,79 @@
+/*
+ * CAPITULO IV: PERIFERICOS ESPECIALES
+ * DEBER 4.1 : CAD Y PWM
+ * OBJETIVO: Realizar un sistema en el cual se conecten 2 motores (parecido al diagrama que se utilizo en clase). 
+ * Los datos de CAD, V y PWM se deben visulizar en una LCD para cada motor.
+ * NOMBRE: Marco Fabricio Latacumba Farinango.
+ *            
+ */
+ 
+#include <LiquidCrystal.h>
+LiquidCrystal lcd1(13,12,9,8,7,6);       //seleccionar los pines para la LCD
+LiquidCrystal lcd2(A1,A0,5,4,3,2);      //seleccionar los pines para la LCD
+const int btn=A4;                      // boton del pull up para el pin analógico A4
+const int sw=A5;                      // creación del switch
+int conver1;                          //variable para tomar los dato del conversor (0-1023)
+int conver2;                         //variable para tomar los dato del conversor (0-1023)
+float voltaje1;                     //variable de conversion de voltaje
+float voltaje2;                    //variable de conversion de voltaje
+int  dutty1;                         //variable para uso de PWM
+int  dutty2;                             //variable para uso de PWM                       
+ 
+void setup() {
+  
+  lcd1.begin(16,2);                      //Inicializa la LCD.
+  lcd2.begin(16,2);                      //Inicializa la LCD.
+  pinMode(sw,INPUT);                      //definir el switch como entrada
+  pinMode(btn,INPUT);                   // definir el boton como entrada
+
+
+}
+
+void loop() {
+  if(digitalRead(btn)==LOW)
+  {
+      conver1=analogRead(A2);                //lectura del canal análogo A2
+      voltaje1=(conver1*5.0)/1023.0;         //conversión de voltaje
+      dutty1=conver1/4;                     //cambio de escala para el ciclo 
+      analogWrite(11,dutty1);                 //envío del valor al pin11 
+      lcd1.setCursor(0,0);                     //ubicación del cursor en la LCD
+      lcd1.print("CAD: " );                  //impresión del mensaje en la LCD
+      lcd1.setCursor(5,0);                    //ubicación del cursor en la LCD
+      lcd1.print(conver1);                 // muestra el resultado del conversor
+      lcd1.setCursor(0,1);                    // posición del cursor en la LCD
+      lcd1.print("V: ");                      // mensaje de salida
+      lcd1.setCursor(3,1);                    // posición del cursor en la LCD
+      lcd1.print(voltaje1);                   // muestra el resultado del voltaje
+      lcd1.setCursor(9,1);                    // posición del cursor en la LCD
+      lcd1.print("PWM: ");                    // mensaje de salida
+      lcd1.setCursor(13,1);                   // posición del cursor en la LCD
+      lcd1.print((dutty1*100)/255);           // realiza la regla de tres
+      delay(400);
+      lcd1.clear();                           // limpia pantalla
+  }else{
+    lcd1.clear();
+  }
+
+  // otro
+  if(digitalRead(sw)==LOW)
+  {
+      conver2=analogRead(A3);             //lectura del canal análogo A3
+      voltaje2=(conver2*5.0)/1023.0;      //conversión de voltaje
+      dutty2=conver2/4;                    //cambio de escala para el ciclo 
+      analogWrite(10,dutty2);                 //envío del valor al pin10 
+      lcd2.setCursor(0,0);                    // posición del cursor en la LCD
+      lcd2.print("CAD: " );                   // mensaje de salida
+      lcd2.setCursor(5,0);                    // posición del cursor en la LCD
+      lcd2.print(conver2);                 // muestra el resultado del conversor
+      lcd2.setCursor(0,1);                    // posición del cursor en la LCD
+      lcd2.print("V: ");                      // mensaje de salida
+      lcd2.setCursor(3,1);                    // posición del cursor en la LCD
+      lcd2.print(voltaje2);                   // muestra el resultado del voltaje
+      lcd2.setCursor(9,1);                    // posición del cursor en la LCD
+      lcd2.print("PWM: ");                    // mensaje de salida
+      lcd2.setCursor(13,1);                   // posición del cursor en la LCD
+      lcd2.print((dutty2*100)/255);           // realiza la regla de tres
+      delay(400);                             
+      lcd2.clear();                           // limpia pantalla
+  }
+}
