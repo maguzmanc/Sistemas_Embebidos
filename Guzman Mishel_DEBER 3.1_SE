@@ -1,0 +1,169 @@
+/* 
+ * CAPITULO III: MODULOS DE COMUNICACIÓN I2C.
+ * CÓDIGO DEBER 3.1:Comunicación I2C configurar 1 maestro y 3 esclavos.  
+ * OBJETIVO:Mediante comunicación I2C configurar 1 maestro y 3 esclavos.                  
+ */
+ ///////////////////////////////***** MASTER***** ////////////////////////////////
+ #include <Wire.h>
+ char dato;                     //Variable de incremento de dato.
+
+void setup() {
+  Wire.begin();                 //Inicia comunicacion i2c
+  Serial.begin(9600);
+  Serial.println("BIENVENIDO USUARIO");
+  Serial.println("Para Activacion de Leds:");
+  Serial.println("x=Esclavo 1");    //Caracter uno (x)
+  Serial.println("y=Esclavo 2");    //Caracter dos (y)
+  Serial.println("z=Esclavo 3");   //Caracter tres (z)
+  }
+
+void loop() {
+  if(Serial.available()>0){     //Verificación puerto de comunicación.
+    dato=Serial.read();         //Alamecena datos
+    Serial.println();           //Visualización de caracter
+    Wire.beginTransmission(1);  //Empieza la transmision con la id establecisa.
+    Wire.write(dato);           //Envia el dato a los esclavos
+    Wire.endTransmission();     //Termina la Comunicación.
+  }
+}
+
+ //////////// ESCLAVO UNO /////////
+ #include <Wire.h>;           // Libreria I2C
+ char dato;                   // variable de almacenamiento de dato
+ const int led1=8;            // led1 en pin8
+ const int led2=9;            // led2 en pin9
+ const int led3=10;           // led3 en pin10
+ const int led4=11;           // led4 en pin11
+
+void setup() {
+  Wire.begin(1);              // id esclavo
+  Wire.onReceive(receiveEvent1);
+  Serial.begin(9600);
+  pinMode(led1,OUTPUT);       // El pin8 - salida 
+  pinMode(led2,OUTPUT);       // El pin9 - salida 
+  pinMode(led3,OUTPUT);       // El pin10 - salida 
+  pinMode(led4,OUTPUT);       // El pin11 - salida 
+}
+
+void loop() { 
+}
+
+void receiveEvent1(int bytes){
+  while(Wire.available()){           //Mientras haya numero de byts disponibles.
+    dato=Wire.read();
+    while(dato=='x')                  //Ciclo mientras 'a' se enciende los leds del primer esclavo.
+    {
+      digitalWrite(led1,HIGH);       //Led 1 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led1,LOW);        //Led 1 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led2,HIGH);       //Led 2 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led2,LOW);        //Led 2 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led3,HIGH);       //Led 3 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led3,LOW);        //Led 3 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led4,HIGH);       //Led 4 encendido
+      delay(9000);                   //Tiempo 
+      digitalWrite(led4,LOW);        //Led 4 apagado
+      delay(9000);                   //Tiempo 
+      dato=(' ');                    //Condición: cualquier otro cracter para el ciclo.
+  }
+}
+}
+//////////// ESCLAVO DOS /////////
+ #include <Wire.h>;           // libreria I2C
+ char dato;                    // variable de almacenamiento de dato
+ const int led5=8;            // led5 en pin8
+ const int led6=9;            // led6 en pin9
+ const int led7=10;           // led7 en pin10
+ const int led8=11;           // led8 en pin10
+  
+void setup() {
+  Wire.begin(1);              // ide esclavo
+  Wire.onReceive(receiveEvent2);
+  Serial.begin(9600);
+  pinMode(led5,OUTPUT);       // pin8 como salida 
+  pinMode(led6,OUTPUT);       // pin9 como salida 
+  pinMode(led7,OUTPUT);       // pin10 como salida
+  pinMode(led8,OUTPUT);       // pin11 como salida
+}
+
+void loop() { 
+}
+
+void receiveEvent2(int bytes){
+  while(Wire.available()){           //Mientras haya numero de byts disponibles.
+    dato=Wire.read();
+    while(dato=='y')                 //Ciclo mientras 'b' se enciende los leds del primer esclavo.
+    {
+      digitalWrite(led5,HIGH);       //Led 5 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led5,LOW);        //Led 5 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led6,HIGH);       //Led 6 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led6,LOW);        //Led 6 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led7,HIGH);       //Led 7 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led7,LOW);        //Led 7 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led8,HIGH);       //Led 8 encendido
+      delay(9000);                   //Tiempo 
+      digitalWrite(led8,LOW);        //Led 8 apagado
+      delay(9000);                   //Tiempo 
+      dato=(' ');                    //Condición: cualquier otro cracter para el ciclo.
+    }
+}
+}
+
+//////////// ESCLAVO TRES /////////
+ #include <Wire.h>;           // libreria I2C
+ char dato;                    // variable de almacenamiento de dato
+ const int led9=8;            // led9 en pin8
+ const int led10=9;            // led10 en pin9
+ const int led11=10;           // led11 en pin10
+ const int led12=11;           // led12 en pin11
+void setup() {
+  Wire.begin(1);              // ide esclavo
+  Wire.onReceive(receiveEvent3);
+  Serial.begin(9600);
+  pinMode(led9,OUTPUT);        // pin8 como salida 
+  pinMode(led10,OUTPUT);       // pin9 como salida 
+  pinMode(led11,OUTPUT);       // pin10 como salida 
+  pinMode(led12,OUTPUT);       // pin11 como salida
+}
+
+void loop() { 
+}
+
+void receiveEvent3(int bytes){
+  while(Wire.available()){          //Mientras haya numero de byts disponibles.
+    dato=Wire.read();
+    while(dato=='z')                //Ciclo mientras 'c' se enciende los leds del primer esclavo.
+    {
+      digitalWrite(led9,HIGH);       //Led 9 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led9,LOW);        //Led 9 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led10,HIGH);       //Led 10 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led10,LOW);        //Led 10 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led11,HIGH);       //Led 11 encendido
+      delay(9000);                   //Tiempo
+      digitalWrite(led11,LOW);        //Led 11 apagado
+      delay(9000);                   //Tiempo 
+      digitalWrite(led12,HIGH);       //Led 12 encendido
+      delay(9000);                   //Tiempo 
+      digitalWrite(led12,LOW);        //Led 12 apagado
+      delay(9000);                   //Tiempo 
+      dato=(' ');                    //Condición: cualquier otro cracter para el ciclo.
+    }
+}
+}
+
+
